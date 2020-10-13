@@ -2,11 +2,13 @@ package com.example.draggablerecyclerview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val data = mutableListOf<Model>()
+    private val adapter = Adapter(data)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         initData()
         setAdapter()
+        setDraggable()
     }
 
     private fun initData() {
@@ -25,8 +28,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setAdapter() {
         val manager = LinearLayoutManager(this)
-        val adapter = Adapter(data)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
+    }
+
+    private fun setDraggable() {
+        val callback = ItemMoveCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
     }
 }
